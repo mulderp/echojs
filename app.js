@@ -57,9 +57,11 @@ if ('development' == app.get('env')) {
 var SiteName = "EchoJS - test";
 
 app.get('/', routes.index);
-app.get('/login', user.login);
 app.get('/submit', routes.submit);
 app.get('/latest', routes.latest);
+
+app.get('/login', user.login);
+app.post('/api/create_account', user.register);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
