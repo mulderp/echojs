@@ -20,5 +20,5 @@ exports.submit = function(req, res){
 };
 
 exports.latest = function(req, res){
-  res.render('latest - todo');
+  res.render('main', { title: 'EchoJS - test', news: [] });
 };
