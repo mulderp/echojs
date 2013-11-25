@@ -2,7 +2,7 @@ var client = require("./redisClient");
 
 
 module.exports = {
-  createUser: function(raw, success_cb, fail_cb) {
+  createUser: function(raw) {
     
      var userId;
     
@@ -18,5 +18,13 @@ module.exports = {
         }).then(function(){
             return client.hmgetAsync('user:'+userId, 'username', 'email');
         });
-    }
+  },
+
+  createSession: function(raw) {
+    return client.hgetAsync('users:1');
+  },
+
+  lookupUser: function(id) {
+    return client.hmgetAsync("user:" + id, 'username');
+  },
 }

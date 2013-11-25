@@ -4,6 +4,15 @@ module.exports = {
   getNewsItem: function(id) {
      return client.hgetallAsync("news:" + id)
   },
+
+  getTop: function() {
+    var that = this;
+    return client.zrevrangeAsync('news.top', 0, -1)
+      .map(function(id) {
+             return that.getNewsItem(id)
+      });
+  },
+
   newsItemToJSON: function(data) {
     console.log(data);
      return {
@@ -18,18 +27,13 @@ module.exports = {
            comments: 0
          };
   },
-  getTop: function() {
-    var that = this;
-    return client.zrevrangeAsync('news.top', 0, -1)
-      .map(function(id) {
-             return that.getNewsItem(id)
-      });
-  },
+
   addVote: function(vote, news_id, user) {
     return client.zaddAsync("news.vote."+vote + ":" + news_id, now(), user).then(function() {
       return client.hincrbyAsync("news:" + news_id, "rating", vote);
     });
   },
+
   votesExists: function(news_id, user) {
     var that = this;
     return Promise.all(_.map([1,2,3,4,5], function(vote) {
@@ -84,32 +88,7 @@ module.exports = {
       });
   },
 
-  lookupUser: function(id) {
-    return client.hmgetAsync("user:" + id, 'username');
-  },
   lookupNewsItem: function(id) {
     return client.hmgetAsync("news:" + id, 'title');
   }
 }
-
-
-
-function rand(seed) {
-  return Math.floor(Math.random()*seed);
-}
-
-function rand_time(seed_time, range) {
-  return seed_time + rand(range);
-}
-
-function rand_rating() {
-  return (1 + rand(4));
-}
-
-Time = {};
-Time.now = 123123;
-
-news = [ 
-];
-
-
