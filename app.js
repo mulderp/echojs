@@ -37,7 +37,8 @@ app.get('/', routes.index);
 app.get('/submit', routes.submit);
 app.get('/latest', routes.latest);
 
-app.get('/login', user.login);
+app.get('/login', user.showLogin);
+app.get('/api/login', user.login);
 app.post('/api/create_account', user.register);
 
 http.createServer(app).listen(app.get('port'), function(){
