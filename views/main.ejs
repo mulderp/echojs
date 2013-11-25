@@ -1,5 +1,9 @@
 <% include layoutTop %>
 
-test
+<% news.forEach(function(item) { %>
+  
+  <% include newsItem %>
+
+<% }) %>
 
 <% include layoutBottom %>

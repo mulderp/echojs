@@ -7,14 +7,8 @@ var _ = require('underscore');
 var querystring = require('querystring');
 
 var Promise = require("bluebird");
-//assume client is a redisClient
-//
 
-var now = (typeof Date.now === 'function')? Date.now : function(){
-    return +(new Date());
-};
-
-// redis
+// setup redis
 var password, database;
 var parsed_url  = url.parse(process.env.REDISTOGO_URL || 'redis://localhost:6379');
 var parsed_auth = (parsed_url.auth || '').split(':');
@@ -31,37 +25,29 @@ if (password = parsed_auth[1]) {
 Promise.promisifyAll(client);
 
 module.exports = {
-  getNews: function(id) {
-     return client.hmgetAsync("news:" + id, 
-         'id'
-    )
+  getNewsItem: function(id) {
+     return client.hgetallAsync("news:" + id)
   },
   newsItemToJSON: function(data) {
-     var genres = data[6] ? data[6].split(",") : [];
+    console.log(data);
      return {
-           id:           data[0],
-           score: parseFloat(data[8]),
-           rank: parseFloat(data[9]),
-           img_url: data[10]
+           id:       data[0],
+           title:    data[1],
+           url:      data[2],
+           user_id:  data[3],
+           ctime:    data[4],
+           score:    data[5],
+           rank:     data[6],
+           down:     0,
+           comments: 0
          };
   },
-  allnews: function() {
+  getTop: function() {
     var that = this;
     return client.zrevrangeAsync('news.top', 0, -1)
       .map(function(id) {
-             return that.getnewsItem(id)
-           })
-           .map(function(data) {
-             return that.newsItemToJSON(data); 
-           });
-  },
-  allGenres: function() {
-    var id = 0;
-    return client.smembersAsync('news.genres').map(function(genre) {
-      return client.scardAsync(genre).then(function (count) { 
-        return { id: id++, name: genre, count: count }
-      })
-    });
+             return that.getNewsItem(id)
+      });
   },
   addVote: function(vote, news_id, user) {
     return client.zaddAsync("news.vote."+vote + ":" + news_id, now(), user).then(function() {
