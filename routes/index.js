@@ -16,9 +16,37 @@ exports.index = function(req, res){
 };
 
 exports.submit = function(req, res){
-  res.send('submit - todo');
+  res.render('submit', { title: 'EchoJS - test', SiteUrl: 'localhost', t: '', u: ''});
 };
 
 exports.latest = function(req, res){
   res.render('main', { title: 'EchoJS - test', news: [] });
 };
+
+exports.submit_post = function(req, res) {
+  res.send("not implemented");
+}
+
+exports.delete_post = function(req, res) {
+  res.send("not implemented");
+}
+
+exports.post_comment = function(req, res) {
+  res.send("not implemented");
+}
+
+exports.updateprofile = function(req, res) {
+  res.send("not implemented");
+}
+
+exports.votecomment = function(req, res) {
+  res.send("not implemented");
+}
+
+exports.sortnews = function(req, res) {
+  res.send("not implemented");
+}
+
+exports.getcomments = function(req, res) {
+  res.send("not implemented");
+}

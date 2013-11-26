@@ -4,7 +4,7 @@
  */
 
 var express = require('express')
-    routes = require('./routes'),
+    news = require('./routes'),
     user = require('./routes/user'),
     http = require('http'),
     path = require('path');
@@ -33,13 +33,21 @@ if ('development' == app.get('env')) {
 // config
 var SiteName = "EchoJS - test";
 
-app.get('/', routes.index);
-app.get('/submit', routes.submit);
-app.get('/latest', routes.latest);
+app.get('/', news.index);
+app.get('/submit', news.submit);
+app.get('/latest', news.latest);
 
 app.get('/login', user.showLogin);
 app.get('/api/login', user.login);
-app.post('/api/create_account', user.register);
+app.post('/api/create_account', user.create_account);
+app.post('/api/reset-password', user.reset_password);
+app.post('/api/submit', news.submit_post);
+app.post('/api/delnews', news.delete_post);
+app.post('/api/postcomment', news.post_comment);
+app.post('/api/updateprofile', news.updateprofile);
+app.post('/api/votecomment', news.votecomment);
+app.get('/api/getnews/:sort/:start/:count', news.sortnews);
+app.get('/api/getcomments/:news_id', news.getcomments);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

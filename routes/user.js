@@ -23,7 +23,7 @@ exports.login = function(req, res){
 };
 
 
-exports.register = function(req, res){
+exports.create_account = function(req, res){
   res.set('Content-Type', 'application/json');
   users.createUser(req.body)
     .then(function(data) {
