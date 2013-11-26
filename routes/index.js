@@ -6,6 +6,7 @@
 var news = require('../api/news');
 
 exports.index = function(req, res){
+  console.log(req.session);
   news.getTop().then(function(news) {
     console.log(news);
     res.render('main', { title: 'EchoJS - test', news: news });

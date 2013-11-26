@@ -12,13 +12,18 @@ exports.showLogin = function(req, res){
 
 exports.login = function(req, res){
   res.set('Content-Type', 'application/json');
-  users.checkLogin(req.body)
+
+  if (!req.query.username || !req.query.password) {
+    res.send({status: 'err', error: "Username and password are two required fields."});  
+    return
+  }
+
+  users.checkLogin(req.query)
     .then(function(data) {
       res.send({status: 'ok', auth: data[0], apisecret: data[1] });
     })
     .catch(function(err) {
-      console.log(err);
-      res.send({status: 'err', error: err});  
+      res.send({status: 'err', error: err.toString()});  
     });
 };
 

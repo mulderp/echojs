@@ -4,7 +4,7 @@ var client = require("./redisClient");
 module.exports = {
   createUser: function(raw) {
     
-     var userId;
+     var userId, that = this;
 
      if (!raw.username || !raw.password) {
        throw new UserException(2, "Credentials are needed");
@@ -18,30 +18,40 @@ module.exports = {
               'password', raw.password
           );
         }).then(function() {
-           client.setAsync("username.to.id:" + raw.username.toLowerCase(), userId);
+          return that.lookupUserByUsername(raw.username);
         }).then(function(){
             return client.hmgetAsync('user:'+userId, 'username', 'email');
         });
   },
 
   checkLogin: function(raw) {
-    if (!raw.username || !raw.password) {
-      throw new UserException(1, "Username and password are two required fields.");
-    }
-
-    // TODO: to be implemented
-    return client.hgetAsync('users:1');
+    var that = this;
+    return this.lookupUserByUsername(raw.username)
+      .then(function(id) {
+        if (id === null) { throw new Error("no user") };
+        return that.lookupUserByID(id);
+      })
   },
 
-  lookupUser: function(id) {
-    return client.hmgetAsync("user:" + id, 'username');
+  lookupUserByID: function(id) {
+    return client.hgetallAsync("user:" + id)
+      .then(function(data) {
+        console.log(data);
+//     hp = hash_password(password,user['salt'])
+//     (user['password'] == hp) ? [user['auth'],user['apisecret']] : nil
+       return "ok"; 
+      });
+  },
+
+  lookupUserByUsername: function(username) {
+    return client.getAsync("username.to.id:" + username.toLowerCase());
   },
 }
 
-function UserException(value, msg) {
-  this.value = value;
+function UserException(msg) {
   this.message = msg;
   this.toString = function() {
      return this.value + this.message
   };
 }
+UserException.prototype = Error.prototype;
