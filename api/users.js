@@ -1,25 +1,53 @@
 var client = require("./redisClient");
 
+config = {
+  UserInitialKarma: 100
+}
+
 
 module.exports = {
   createUser: function(raw) {
-    
-     var userId, that = this;
+
+    var userId,
+        username,
+        authToken,
+        that = this;
 
      if (!raw.username || !raw.password) {
        throw new UserException(2, "Credentials are needed");
      }
-    
+
      return client.incrAsync('users.count').then(function(id){
         userId = id;
+        username = raw.username.toLowerCase();
+        auth_token = get_rand();
+        var salt = get_rand();
+
         return client.hmsetAsync(
-              'user:' + id,
-              'username', raw.username,
-              'password', raw.password
+              "user:" + id,
+              "username", username,
+              "password", hash_password(raw.password, salt),
+              "salt", salt,
+              "ctime", get_time(),
+              "karma", config.UserInitialKarma,
+              "about", "",
+              "email", "",
+              "auth", auth_token,
+              "apisecret", get_rand(),
+              "flags", "",
+              "karma_incr_time", get_time(),
+              "flags", userId === 1 ? "a" : ""
           );
-        }).then(function(){
-            return client.hmgetAsync('user:'+userId, 'username', 'email');
-        });
+        })
+        .then(function() {
+          return client.setAsync('username.to.id:' + username, userId);
+        })
+        .then(function() {
+          return client.setAsync('auth:' + auth_token, userId);
+        })
+        .then(function() {
+          return auth_token;
+        })
   },
 
   checkLogin: function(raw) {
@@ -36,7 +64,7 @@ module.exports = {
     return this.lookupUserByID(id)
       .then(function(user) {
         if (true) { //user.password === hash_password(password, user.salt)) {
-          return [user.auth, user.apisecret]; 
+          return [user.auth, user.apisecret];
         }
         else
         {
@@ -48,24 +76,6 @@ module.exports = {
   lookupUserByID: function(id) {
     var that = this;
     return client.hgetallAsync("user:" + id)
-  },
-
-  userAsJSON: function(data) {
-    console.log(data);
-    return {
-      id:       data[0],
-      username: data[1],
-      salt:     data[2],
-      password: data[3],
-      ctime:    data[4],
-      karma:    data[5],
-      about:    data[6],
-      email:    data[7],
-      auth:     data[8],
-      apisecret: data[9],
-      flags:     data[10],
-      karma_incr_time: data[11]
-    }
   },
 
   lookupUserID: function(username) {
@@ -90,6 +100,14 @@ function hash_password(hash, salt) {
   //     p.key_length = 160/8
   // end
   // p.hex_string
+}
+
+function get_time() {
+  return 123;
+}
+
+function get_rand() {
+  return 123;
 }
 
 
