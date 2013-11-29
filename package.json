@@ -14,6 +14,8 @@
     "bluebird": "latest",
     "hiredis": "latest",
     "redis": "latest",
+    "node-pbkdf2": "latest",
+    "randbytes": "latest",
     "crypto": "latest"
   }
 }
