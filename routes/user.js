@@ -14,7 +14,7 @@ exports.login = function(req, res){
   res.set('Content-Type', 'application/json');
 
   if (!req.query.username || !req.query.password) {
-    res.send({status: 'err', error: "Username and password are two required fields."});  
+    res.send({status: 'err', error: "Username and password are two required fields."});
     return
   }
 
@@ -23,7 +23,7 @@ exports.login = function(req, res){
       res.send({status: 'ok', auth: data[0], apisecret: data[1] });
     })
     .catch(function(err) {
-      res.send({status: 'err', error: err.toString()});  
+      res.send({status: 'err', error: err.toString()});
     });
 };
 

@@ -5,7 +5,7 @@
 
 var news = require('../api/news');
 
-exports.index = function(req, res){
+exports.news = function(req, res){
   console.log(req.session);
   news.getTop().then(function(news) {
     console.log(news);
