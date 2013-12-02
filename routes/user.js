@@ -45,3 +45,7 @@ exports.reset_password = function(req, res) {
   res.send("not implemented yet");
 }
 
+exports.updateprofile = function(req, res) {
+  res.send("not implemented");
+}
+

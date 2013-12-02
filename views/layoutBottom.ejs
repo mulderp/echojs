@@ -3,4 +3,11 @@
 		</div>
 		<% include footer %>
 	</div>
+    <script>
+    <% if (user) { %>
+        var apisecret = '<%= user.apisecret %>';
+    <% } else { %>
+        apisecret = "";
+    <% } %>
+    </script>
 </body>

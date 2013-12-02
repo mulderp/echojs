@@ -4,7 +4,7 @@
  */
 
 var express = require('express')
-    news = require('./routes'),
+    news = require('./routes/news'),
     user = require('./routes/user'),
     http = require('http'),
     path = require('path');
@@ -33,18 +33,19 @@ if ('development' == app.get('env')) {
 // config
 var SiteName = "EchoJS - test";
 
-app.get('/', news.index);
+app.get('/', news.news);
 app.get('/submit', news.submit);
 app.get('/latest', news.latest);
-
 app.get('/login', user.showLogin);
+
 app.get('/api/login', user.login);
 app.post('/api/create_account', user.create_account);
 app.post('/api/reset-password', user.reset_password);
+app.post('/api/updateprofile', user.updateprofile);
+
 app.post('/api/submit', news.submit_post);
 app.post('/api/delnews', news.delete_post);
 app.post('/api/postcomment', news.post_comment);
-app.post('/api/updateprofile', news.updateprofile);
 app.post('/api/votecomment', news.votecomment);
 app.get('/api/getnews/:sort/:start/:count', news.sortnews);
 app.get('/api/getcomments/:news_id', news.getcomments);

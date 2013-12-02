@@ -25,19 +25,15 @@ exports.latest = function(req, res){
 };
 
 exports.submit_post = function(req, res) {
-  res.send("not implemented");
+  res.send({status: 'err', error: "not yet implemented"});
 }
 
 exports.delete_post = function(req, res) {
-  res.send("not implemented");
+  res.send({status: 'err', error: "not yet implemented"});
 }
 
 exports.post_comment = function(req, res) {
-  res.send("not implemented");
-}
-
-exports.updateprofile = function(req, res) {
-  res.send("not implemented");
+  res.send({status: 'err', error: "not yet implemented"});
 }
 
 exports.votecomment = function(req, res) {
