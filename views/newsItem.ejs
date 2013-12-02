@@ -1,3 +1,93 @@
 <div class="item">
-  <a href="<%= item.url %>"><%= item.title %></a>
+    <% if (item.del) { %>
+      <article class="deleted">
+          "[deleted news]"
+      </article> 
+    <% } %>
+
+<!--
+    domain = news_domain(news)
+    news = {}.merge(news) # Copy the object so we can modify it as we wish.
+    news["url"] = "/news/#{news["id"]}" if !domain
+    upclass = "uparrow"
+    downclass = "downarrow"
+    if news["voted"] == :up
+        upclass << " voted"
+        downclass << " disabled"
+    elsif news["voted"] == :down
+        downclass << " voted"
+        upclass << " disabled"
+    end
+-->
+
+    <article data-news-id="<%= item.id %>">
+
+        <a href="#up" class="upclass">
+            &#9650;
+        </a>
+
+        <h2>
+            <a href="<%= item.url %> rel="nofollow">
+                <%= item.title %>
+            </a>
+        </h2>
+
+        <!-- address {
+            if domain
+                "at "+H.entities(domain)
+            else "" end +
+            if ($user and $user['id'].to_i == news['user_id'].to_i and
+                news['ctime'].to_i > (Time.now.to_i - NewsEditTime))
+                " " + H.a(:href => "/editnews/#{news["id"]}") {
+                    "[edit]"
+                }
+            else "" end
+        }+
+        -->
+
+        <a  href="#down"  class="downclass">
+            &#9660;
+        </a>
+
+        <p>
+            <span  class="upvotes"><%= item.up %></span> up and 
+            <span  class="downvotes"><%= item.down %></span> down, posted by          
+            <username>
+                <a href="/user/<%= item.username %>">
+                    <%= item.username %>
+                </a>
+            </username>
+
+            <%= item.ctime %>  
+
+            <a  href="/news/#>%= item.id %>"
+                <% if (item.comments != 0) { %>
+                   <%= item.comments %> comment<% if (item.comments >1) { %>s <% } %>
+                <% } else { %>
+                   discuss
+                <% } %>
+        </p>
+
+        <!--
+            if ($user && user_is_admin?($user))
+        -->
+                " - "
+                
+                <a  href="/editnews/#<%= item.id %>">edit</a> - <a href="http://twitter.com/intent/tweet?url=#{SiteUrl}/news/#{news["id"]}&text="+H.urlencode(news["title"])+" - ")>tweet</a>
+            
+        <!--
+            else { "" }
+         -->
+        </article>
+
+<!--
+        if params and params[:debug] and $user and user_is_admin?($user)
+            "id: "+news["id"].to_s+" "+
+            "score: "+news["score"].to_s+" "+
+            "rank: "+compute_news_rank(news).to_s+" "+
+            "zset_rank: "+$r.zscore("news.top",news["id"]).to_s
+        else "" end
+
+-->
+
 </div>
