@@ -47,3 +47,7 @@ exports.sortnews = function(req, res) {
 exports.getcomments = function(req, res) {
   res.send("not implemented");
 }
+
+exports.about = function(req, res) {
+  res.send("not implemented");
+}

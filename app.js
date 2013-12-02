@@ -37,6 +37,7 @@ app.get('/', news.news);
 app.get('/submit', news.submit);
 app.get('/latest', news.latest);
 app.get('/login', user.showLogin);
+app.get('/about', news.about);
 
 app.get('/api/login', user.login);
 app.post('/api/create_account', user.create_account);
