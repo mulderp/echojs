@@ -43,11 +43,6 @@ module.exports = {
          return hashPassword(raw.password, salt);
        })
        .then(function(password) {
-
-         console.log(raw.password);
-         console.log(salt);
-         console.log(password);
-
          return client.hmsetAsync(
              "user:" + id,
              "username", username,
@@ -159,7 +154,7 @@ function checkPassword(pw, user) {
 }
 
 function get_time() {
-  return 123;
+  return (new Date).getTime();
 }
 
 var randomSource = RandBytes.urandom.getInstance();

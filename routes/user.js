@@ -7,7 +7,7 @@ var users = require('../api/users');
 
 exports.showLogin = function(req, res){
   res.set('Content-Type', 'text/html');
-  res.render('login', { title: 'EchoJS - test' });
+  res.render('login', { title: 'EchoJS - test', auth: null });
 };
 
 exports.login = function(req, res){

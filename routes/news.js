@@ -4,12 +4,18 @@
  */
 
 var news = require('../api/news');
+var cookieParser = require('../api/cookieParser');
 
 exports.news = function(req, res){
   console.log(req.session);
+  var cookies = cookieParser(req);
+  console.log(cookies.auth);
+  var auth;
+  cookies && cookies.auth ? auth = cookies.auth : auth = null;
+
   news.getTop().then(function(news) {
     console.log(news);
-    res.render('main', { title: 'EchoJS - test', news: news });
+    res.render('main', { title: 'EchoJS - test', news: news, auth: auth });
   })
   .catch(function(err) {
     console.log(err)

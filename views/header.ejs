@@ -10,7 +10,11 @@
 	</nav>
 
 	<nav id='account'>
-        <a href='/login'>login / register</a>
+    <% if (!auth) { %>
+       <a href='/login'>login / register</a>
+    <% } else { %>
+       <a href='/logout'>logout</a>
+    <% } %>
 	</nav>
 	<a href="#" id="link-menu-mobile"><~></a>
 </header>
